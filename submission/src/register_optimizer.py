@@ -1,9 +1,6 @@
 import numpy as np
-#from pulser import Pulse, Sequence, Register
 from pulser import Register
-#from pulser_simulation import QutipEmulator
 from pulser.devices import DigitalAnalogDevice
-#from pulser.waveforms import InterpolatedWaveform
 from scipy.optimize import minimize
 from scipy.spatial.distance import pdist, squareform
 
