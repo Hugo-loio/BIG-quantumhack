@@ -50,6 +50,6 @@ coverage.xml
 docs/_build/
 
 # aqora
-.aqora
-.venv
+#.aqora
+#.venv
 **/__generated__*.py

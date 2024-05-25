@@ -1,0 +1,25 @@
+[project]
+name = "use-case"
+version = "0.1.0"
+requires-python = ">=3.9"
+
+dependencies = [
+    "aqora-cli>=0.1.13,<0.2"
+]
+
+[build-system]
+requires = ["setuptools", "wheel", "uv"]
+build-backend = "setuptools.build_meta"
+
+[tool.aqora]
+type = "use_case"
+data = "data"
+competition = "paris-hack-24-ansys"
+template = "template"
+generator = "use_case.generator"
+aggregator = "use_case.aggregate"
+
+[[tool.aqora.layers]]
+name = "solution"
+transform = "$solution"
+metric = "$metric"
