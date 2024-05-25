@@ -1,5 +1,6 @@
 
 import numpy as np
+import src.register_optimizer as regop
 from pulser import Pulse, Sequence, Register
 from pulser import Register
 from pulser_simulation import QutipEmulator
@@ -8,8 +9,11 @@ from pulser.waveforms import InterpolatedWaveform
 from scipy.optimize import minimize
 from scipy.spatial.distance import pdist, squareform
 
-def quantum_loop(parameters,parameter2):
+def quantum_loop(parameters,parameter2,Q):
     LAYERS=parameter2
+    
+    reg = regop.optimized_register(Q)
+    regop.draw_register(reg)
 
     # Parametrized sequence
     seq = Sequence(reg, DigitalAnalogDevice)
