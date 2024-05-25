@@ -12,8 +12,6 @@ def evaluate_mapping(coords, *args):
     return np.linalg.norm(matrix - approx_matrix)
 
 def optimized_coords(matrix):
-    for i in range(len(matrix)):
-        matrix[i,i] = 0 
     shape = (len(matrix), 2)
     costs = []
     np.random.seed(0)
