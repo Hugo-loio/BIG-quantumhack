@@ -53,3 +53,6 @@ docs/_build/
 #.aqora
 #.venv
 **/__generated__*.py
+
+# Mac stuff
+.DS_Store
