@@ -8,8 +8,8 @@ from pulser.waveforms import InterpolatedWaveform
 from scipy.optimize import minimize
 from scipy.spatial.distance import pdist, squareform
 
-def quantum_loop(parameters):
-    LAYERS=2
+def quantum_loop(parameters,parameter2):
+    LAYERS=parameter2
     params = np.array(parameters)
     t_params, s_params = np.reshape(params.astype(int), (2, LAYERS))
     assigned_seq = seq.build(t_list=t_params, s_list=s_params)
