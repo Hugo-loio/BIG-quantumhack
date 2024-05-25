@@ -10,6 +10,22 @@ from scipy.spatial.distance import pdist, squareform
 
 def quantum_loop(parameters,parameter2):
     LAYERS=parameter2
+
+    # Parametrized sequence
+    seq = Sequence(reg, DigitalAnalogDevice)
+    seq.declare_channel("ch0", "rydberg_global")
+
+    t_list = seq.declare_variable("t_list", size=LAYERS)
+    s_list = seq.declare_variable("s_list", size=LAYERS)
+
+    for t, s in zip(t_list, s_list):
+        pulse_1 = Pulse.ConstantPulse(1000 * t, 1.0, 0.0, 0)
+        pulse_2 = Pulse.ConstantPulse(1000 * s, 0.0, 1.0, 0)
+
+    seq.add(pulse_1, "ch0")
+    seq.add(pulse_2, "ch0")
+
+    seq.measure("ground-rydberg")
     params = np.array(parameters)
     t_params, s_params = np.reshape(params.astype(int), (2, LAYERS))
     assigned_seq = seq.build(t_list=t_params, s_list=s_params)
