@@ -66,8 +66,8 @@ def Annealing_GS(H1_matrix, N, M, taumax, t_steps):
         for i in range(0,M):
             ekets_ar[i] = np.array((eket_save[i].full())[:,0], dtype=complex)
         # find the overlap between the eigenstates and psi 
-        #for n, eket in enumerate(ekets):
-        #    P_mat[idx[0],n] = abs((eket.dag().data * psi.data)[0,0])**2    
+        for n, eket in enumerate(ekets):
+            P_mat[idx[0],n] = abs((eket.dag().data * psi.data)[0,0])**2    
             
         idx[0] += 1
     qutip.mesolve(h_t, psi0, taulist, [], process_rho, args)
