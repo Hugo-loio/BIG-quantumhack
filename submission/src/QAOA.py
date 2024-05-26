@@ -33,7 +33,7 @@ def QAOA(Q):
     np.random.seed(0)
     
     reg = regop.optimized_register(Q)
-    regop.draw_register(reg)
+    # regop.draw_register(reg)
 
     LAYERS = 2
 
@@ -78,4 +78,6 @@ def QAOA(Q):
 
     optimal_count_dict = quantum_loop(params[np.argmin(scores)])
 
-    QAOA_func.plot_distribution(optimal_count_dict)
+    # QAOA_func.plot_distribution(optimal_count_dict)
+    cost=qb.get_cost(optimal_count_dict, Q)
+    return(cost)
