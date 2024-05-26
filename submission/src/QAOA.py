@@ -56,7 +56,7 @@ def QAOA(Q):
 
     scores = []
     params = []
-    for repetition in range(20):
+    for repetition in range(10):
         guess = {
             "t": np.random.uniform(1, 10, LAYERS),
             "s": np.random.uniform(1, 10, LAYERS),
