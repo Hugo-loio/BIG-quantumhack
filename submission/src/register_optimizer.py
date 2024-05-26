@@ -11,23 +11,26 @@ def evaluate_mapping(coords, *args):
     approx_matrix = squareform( DigitalAnalogDevice.interaction_coeff / pdist(coords) ** 6)
     return np.linalg.norm(matrix - approx_matrix)
 
-def optimized_coords(matrix):
+def optimized_coords(matrix, seed):
     shape = (len(matrix), 2)
     costs = []
-    np.random.seed(0)
+    #np.random.seed(seed)
     x0 = np.random.random(shape).flatten()
+    print(x0)
+    bounds = [(0,35) for _ in x0]
     res = minimize(
         evaluate_mapping,
         x0,
         args=(matrix, shape),
         method="Nelder-Mead",
-        tol=1e-6,
-        options={"maxiter": 200000, "maxfev": None},
+        tol=1e-8,
+        bounds = bounds,
+        options={"maxiter": 2000000, "maxfev": None},
     )
     return np.reshape(res.x, (len(matrix), 2))
 
-def optimized_register(matrix):
-    coords = optimized_coords(matrix)
+def optimized_register(matrix, seed = 0):
+    coords = optimized_coords(matrix, seed)
     qubits = dict(enumerate(coords))
     return Register(qubits)
 

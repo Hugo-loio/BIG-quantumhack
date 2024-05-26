@@ -11,12 +11,14 @@ from pulser.waveforms import InterpolatedWaveform
 def adiabatic_sequence(Q, reg, T):
     # We choose a median value between the min and the max
     Omega = np.median(Q[Q > 0].flatten())
-    delta_0 = -5  # just has to be negative
-    delta_f = -delta_0  # just has to be positive
+    delta_0 = np.average(Q.diagonal())  
+    #print(delta_0)
+    delta_f = -delta_0  
 
     adiabatic_pulse = Pulse(
-        InterpolatedWaveform(T, [1e-9, Omega, 1e-9]),
-        InterpolatedWaveform(T, [delta_0, 0, delta_f]),
+        InterpolatedWaveform(T, [1e-9, Omega/2, Omega, Omega/2, 1e-9]),
+        #InterpolatedWaveform(T, [1e-9, Omega, 1e-9]),
+        InterpolatedWaveform(T, [delta_0, delta_0/2, 0, delta_f/2, delta_f]),
         0,
     )
 
