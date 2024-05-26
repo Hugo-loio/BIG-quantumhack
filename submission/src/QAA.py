@@ -44,3 +44,10 @@ def plot_distribution(C):
     plt.xticks(rotation="vertical")
     plt.show()
 
+
+def plot_costs(costs):
+    plt.figure(figsize=(12, 6))
+    plt.plot(range(1, 11), np.array(costs), "--o")
+    plt.xlabel("total time evolution (µs)", fontsize=14)
+    plt.ylabel("cost", fontsize=14)
+    plt.show()

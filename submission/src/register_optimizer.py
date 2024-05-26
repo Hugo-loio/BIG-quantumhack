@@ -14,9 +14,8 @@ def evaluate_mapping(coords, *args):
 def optimized_coords(matrix, seed):
     shape = (len(matrix), 2)
     costs = []
-    #np.random.seed(seed)
+    np.random.seed(seed)
     x0 = np.random.random(shape).flatten()
-    print(x0)
     bounds = [(0,35) for _ in x0]
     res = minimize(
         evaluate_mapping,
