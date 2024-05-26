@@ -45,6 +45,6 @@ def plotting_random(G):
     pos = nx.spring_layout(G)
 
     #Draw the 2D grid graph
-    pos = dict((n, n) for n in G.nodes())  # Use node coordinates as positions
+    pos = nx.spring_layout(G)  # Position nodes using Fruchterman-Reingold force-directed algorithm
 
     nx.draw(G, pos, with_labels=True, node_color="lightblue", node_size=500, font_size=10, font_weight="bold", edge_color="gray")
