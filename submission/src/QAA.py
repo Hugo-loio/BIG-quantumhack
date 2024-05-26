@@ -26,7 +26,7 @@ def adiabatic_sequence(Q, reg, T):
     return seq
 
 def get_counts(sequence, sampling_rate = 0.1):
-    simul = QutipEmulator.from_sequence(sequence)
+    simul = QutipEmulator.from_sequence(sequence, sampling_rate)
     results = simul.run()
     final = results.get_final_state()
     return results.sample_final_state()
