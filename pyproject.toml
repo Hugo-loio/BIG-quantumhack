@@ -3,7 +3,7 @@ name = "submission"
 version = "0.1.0"
 requires-python = ">=3.9"
 
-dependencies = ["qubovert ~=1.2.5", "networkx ~=3.3", "pulser ~=0.18.0"]
+dependencies = ["qubovert ~=1.2.5", "networkx ~=3.3", "pulser ~=0.18.0", "numpy ~=1.26.4"]
 
 [build-system]
 requires = ["uv", "setuptools", "wheel"]
