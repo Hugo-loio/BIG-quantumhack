@@ -138,8 +138,8 @@ def QRAC_HAMILTONIAN(matrix, N_v):
     # Feature[1]=Number of the qubit of a given color
     # Feature[2]=Operator (X,Y,Z)=(0,1,2) associated to each vertex
     features = features_def(coloring, N_v, n_colors).astype('int')
-    print('--------------------')
-    print('FEATURES=\n',features)
+    #print('--------------------')
+    #print('FEATURES=\n',features)
     #-------------------------------------------------------------------------------
     #Create H_relax
     #-------------------------------------------------------------------------------
@@ -149,8 +149,8 @@ def QRAC_HAMILTONIAN(matrix, N_v):
     for c in range(0, n_colors):
         #N_qubit += np.sum(np.where(features[0]==c, 1, 0))//3+np.sum(np.where(features[0]==c, 1, 0))%3
         N_qubit += math.ceil(np.sum(np.where(features[0]==c, 1, 0))/3)
-    print('--------------------')
-    print('Number of QBITS=',N_qubit)
+    #print('--------------------')
+    #print('Number of QBITS=',N_qubit)
 
     # Qbit_ordering is a vector that for every vertex determines the position of associated qubit in the chain
     # ATTENTION: elements in the chain are starting from 1: [1,2,...,N]
@@ -161,8 +161,8 @@ def QRAC_HAMILTONIAN(matrix, N_v):
         for j in range(0,n_color_indx):
             Qubit_ordering[color_indx[j]] += 1+(j)//3
     Qubit_ordering = Qubit_ordering.astype(int)
-    print('--------------------')
-    print('Qbits ordering=',Qubit_ordering)
+    #print('--------------------')
+    #print('Qbits ordering=',Qubit_ordering)
 
     # In the spin chain we order qbits for colors
     # S_op[0] = Sx, S_op[1] = Sy, S_op[2] = Sz
@@ -171,8 +171,8 @@ def QRAC_HAMILTONIAN(matrix, N_v):
         for j in range(0, N_v):
             H_RELAX += matrix[i,j]*H2(S_op[features[2,i]], S_op[features[2,j]], Qubit_ordering[i], Qubit_ordering[j], N_qubit)
     H_RELAX = 0.5*(np.identity(d**(N_qubit), dtype='cfloat') - 3*H_RELAX)
-    print('--------------------')
-    print('H_RELAX=\n',H_RELAX)
+    #print('--------------------')
+    #print('H_RELAX=\n',H_RELAX)
     return H_RELAX, N_qubit, Qubit_ordering, features 
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
