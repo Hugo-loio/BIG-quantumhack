@@ -12,7 +12,7 @@ import src.qubo as qb
 
 
 def QAOA(Q):
-
+ 
     def func(param, *args):
         Q = args[0]
         C = quantum_loop(param)

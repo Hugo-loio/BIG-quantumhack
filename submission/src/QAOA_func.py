@@ -24,16 +24,6 @@ def func(param, *args):
     cost = get_cost(C, Q)
     return cost
 
-def evaluate_mapping(new_coords, *args):
-    """Cost function to minimize. Ideally, the pairwise
-    distances are conserved"""
-    Q, shape = args
-    new_coords = np.reshape(new_coords, shape)
-    new_Q = squareform(
-        DigitalAnalogDevice.interaction_coeff / pdist(new_coords) ** 6
-    )
-    return np.linalg.norm(new_Q - Q)
-
 def plot_distribution(C):
     C = dict(sorted(C.items(), key=lambda item: item[1], reverse=True))
     indexes = ["01011", "00111"]  # QUBO solutions
