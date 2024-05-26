@@ -44,5 +44,3 @@ def plot_distribution(C):
     plt.bar(C.keys(), C.values(), width=0.5, color=color_dict.values())
     plt.xticks(rotation="vertical")
     plt.show()
-
-
