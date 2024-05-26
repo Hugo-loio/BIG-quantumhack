@@ -1,4 +1,5 @@
 import numpy as np
+import math
 
 #Number n of vertexes in QRAC:(n,1)
 N_QRAC = 3
@@ -146,7 +147,8 @@ def QRAC_HAMILTONIAN(matrix, N_v):
     N_qubit = 0
     Qubit_ordering = np.zeros(N_v)
     for c in range(0, n_colors):
-        N_qubit += np.sum(np.where(features[0]==c, 1, 0))//3+np.sum(np.where(features[0]==c, 1, 0))%3
+        #N_qubit += np.sum(np.where(features[0]==c, 1, 0))//3+np.sum(np.where(features[0]==c, 1, 0))%3
+        N_qubit += math.ceil(np.sum(np.where(features[0]==c, 1, 0))/3)
     print('--------------------')
     print('Number of QBITS=',N_qubit)
 
@@ -167,34 +169,52 @@ def QRAC_HAMILTONIAN(matrix, N_v):
     H_RELAX = np.zeros((2**N_qubit, 2**N_qubit), dtype='cfloat')
     for i in range(0, N_v):
         for j in range(0, N_v):
-            H_RELAX += matrix[i,j]*H2(S_op[features[1,i]], S_op[features[1,j]], Qubit_ordering[i], Qubit_ordering[j], N_qubit)
+            H_RELAX += matrix[i,j]*H2(S_op[features[2,i]], S_op[features[2,j]], Qubit_ordering[i], Qubit_ordering[j], N_qubit)
     H_RELAX = 0.5*(np.identity(d**(N_qubit), dtype='cfloat') - 3*H_RELAX)
     print('--------------------')
     print('H_RELAX=\n',H_RELAX)
-    return H_RELAX
+    return H_RELAX, N_qubit, Qubit_ordering, features 
 
-#-------------------------------------------------------------------------------
-# Graph definition and system parameters
-#-------------------------------------------------------------------------------
-# Define the graph matrix:
-# Number of vertices
-# N_v = 2
-# adj_matrix = np.zeros((N_v,N_v))
-# adj_matrix[0] = np.array([0,1,1,1,0,0,0,0,0,0])
-# adj_matrix[1] = np.array([1,0,0,0,1,0,0,0,1,0])
-# adj_matrix[2] = np.array([1,0,0,0,0,0,1,1,0,0])
-# adj_matrix[3] = np.array([1,0,0,0,0,1,0,0,0,1])
-# adj_matrix[4] = np.array([0,1,0,0,0,1,0,1,0,0])
-# adj_matrix[5] = np.array([0,0,0,1,1,0,1,0,0,0])
-# adj_matrix[6] = np.array([0,0,1,0,0,1,0,0,1,0])
-# adj_matrix[7] = np.array([0,0,1,0,1,0,0,0,0,1])
-# adj_matrix[8] = np.array([0,1,0,0,0,0,1,0,0,1])
-# adj_matrix[9] = np.array([0,0,0,1,0,0,0,1,1,0])
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# Decode the graph and find the resulting partition
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-# adj_matrix[0] = np.array([0,1,1])
-# adj_matrix[1] = np.array([1,0,1])
-# adj_matrix[2] = np.array([1,1,0])
+# Define Pauli matrices
+E1 = np.zeros([2,2,2], dtype='cfloat')
+E2 = np.zeros([2,2,2], dtype='cfloat')
+E3 = np.zeros([2,2,2], dtype='cfloat')
+St_p = 1/(np.sqrt(2))*np.array([1.,1.], dtype='cfloat')
+St_m = 1/(np.sqrt(2))*np.array([1.,-1.], dtype='cfloat')
+St_pi = 1/(np.sqrt(2))*np.array([1.,1j], dtype='cfloat')
+St_mi = 1/(np.sqrt(2))*np.array([1.,-1j], dtype='cfloat')
+St_0 = np.array([1.,0.], dtype='cfloat')
+St_1 = np.array([0.,1.], dtype='cfloat')
+E1[0] = St_p[:,np.newaxis]*St_p[np.newaxis,:]
+E1[1] = St_m[:,np.newaxis]*St_m[np.newaxis,:]
+E2[0] = St_pi[:,np.newaxis]*St_pi[np.newaxis,:]
+E2[1] = St_mi[:,np.newaxis]*St_mi[np.newaxis,:]
+E3[0] = St_0[:,np.newaxis]*St_0[np.newaxis,:]
+E3[1] = St_1[:,np.newaxis]*St_1[np.newaxis,:]
 
-# adj_matrix[0] = np.array([0,1])
-# adj_matrix[1] = np.array([1,0])
+E_tot = np.zeros([3,2,2,2], dtype='cfloat')
+E_tot[0] = E1
+E_tot[1] = E2
+E_tot[2] = E3
 
+def Graph_partition_func(gs_vector, N_v, qbit_ord, n_qbit, features):
+
+    St_partition_0 = np.zeros(N_v).astype('complex')
+    St_partition_1 = np.zeros(N_v).astype('complex')
+
+    for i in range(0, N_v):
+        St_partition_0[i] = (np.einsum('i,i->',np.einsum('i,ij->j',np.conjugate(gs_vector),H1(E_tot[features[2,i],0],qbit_ord[i],n_qbit)),gs_vector))
+        St_partition_1[i] = (np.einsum('i,i->',np.einsum('i,ij->j',np.conjugate(gs_vector),H1(E_tot[features[2,i],1],qbit_ord[i],n_qbit)),gs_vector))
+
+    St_partition_0 = np.real(St_partition_0)
+    St_partition_1 = np.real(St_partition_1)
+
+    GRAPH_PARTITION_0 = np.where(St_partition_0>0, 1, 0)
+    GRAPH_PARTITION_1 = np.where(St_partition_1>0, 1, 0)
+    return GRAPH_PARTITION_0, GRAPH_PARTITION_1
