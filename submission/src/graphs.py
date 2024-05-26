@@ -37,6 +37,26 @@ def plotting_square(G):
 
     nx.draw(G, pos, with_labels=True, labels=labels, node_size=500, node_color="lightblue", font_size=10, font_weight="bold", edge_color="gray")
 
+def plotting_rectangle(G,rows,cols):
+    import src.graphs as graph
+
+    size=int(np.sqrt(G.number_of_nodes()))
+
+    mapping = {}
+    counter = 1
+    for i in range(rows):
+        for j in range(cols):
+            mapping[(i, j)] = counter
+            counter += 1
+
+    #Create labels using the mapping
+    labels = {node: str(mapping[node]) for node in G.nodes()}
+
+    #Draw the 2D grid graph
+    pos = dict((n, n) for n in G.nodes())  # Use node coordinates as positions
+
+    nx.draw(G, pos, with_labels=True, labels=labels, node_size=500, node_color="lightblue", font_size=10, font_weight="bold", edge_color="gray")
+
 
 def plotting_random(G):
     import src.graphs as graph
